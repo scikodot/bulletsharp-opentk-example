@@ -86,7 +86,7 @@ namespace BasicDemo
             _physics = new Physics();
         }
 
-        protected override void OnLoad(System.EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(Color.MidnightBlue);
@@ -94,6 +94,11 @@ namespace BasicDemo
             GL.Enable(EnableCap.ColorMaterial);
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.Lighting);
+
+            // set matrices
+            aspectRatio = Width / (float)Height;
+            perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 0.1f, 100);
+            lookAt = Matrix4.LookAt(position, position + new Vector3(0, 0, -1), Vector3.UnitY);
         }
 
         protected override void OnUnload(System.EventArgs e)
@@ -318,7 +323,7 @@ namespace BasicDemo
             GL.DrawElements(PrimitiveType.Quads, 24, DrawElementsType.UnsignedByte, _indices);
         }
 
-        private static Matrix4 Convert(BulletSharp.Math.Matrix m)
+        private static Matrix4 Convert(Matrix m)
         {
             return new Matrix4(
                 m.M11, m.M12, m.M13, m.M14,
